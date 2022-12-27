@@ -77,7 +77,7 @@ public class Sudoku_generator
     // Random generator
     int randomGenerator(int num)
     {
-        return (int) Math.floor((Math.random()*num+1));
+        return (int) (Math.random()*num+1);
     }
 
     // Check if safe to put in cell
@@ -161,14 +161,8 @@ public class Sudoku_generator
         int count = K;
         while (count != 0)
         {
-            int cellId = randomGenerator(N*N)-1;
-
-            // System.out.println(cellId);
-            // extract coordinates i  and j
-            int i = (cellId/N);
-            int j = cellId%9;
-            if (j != 0)
-                j = j - 1;
+            int i = randomGenerator(N)-1;
+            int j = randomGenerator(N)-1;
 
             // System.out.println(i+" "+j);
             if (mat[i][j] != 0)
@@ -179,29 +173,7 @@ public class Sudoku_generator
         }
     }
 
-    // Print sudoku
-    public void printSudoku()
-    {
-        for (int i = 0; i<N; i++)
-        {
-            for (int j = 0; j<N; j++)
-                System.out.print(mat[i][j] + " ");
-            System.out.println();
-        }
-        System.out.println();
-    }
-
     public int[][] getSudoku(){
         return mat;
     }
-
-    /* Driver code
-    public static void main(String[] args)
-    {
-        int N = 9, K = 20;
-        Sudoku_generator sudoku = new Sudoku_generator(N, K);
-        sudoku.fillValues();
-        sudoku.printSudoku();
-    }
-    */
 }

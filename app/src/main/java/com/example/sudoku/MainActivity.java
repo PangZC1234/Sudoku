@@ -14,7 +14,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Button btn_start;
     private RadioGroup rg;
-    private int blanks = 1;
+    private int blanks = 40;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
