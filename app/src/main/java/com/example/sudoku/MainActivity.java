@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 switch(i){
                     case R.id.rb_easy:
-                        blanks = 4;
+                        blanks = 40;
                         break;
                     case R.id.rb_medium:
                         blanks = 50;

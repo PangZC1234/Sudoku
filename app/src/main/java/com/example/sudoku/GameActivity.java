@@ -123,7 +123,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
     }
-    
+
     private boolean checkAllGroups() {
         int cellGroupFragments[] = new int[]{R.id.cellGroupFragment, R.id.cellGroupFragment2, R.id.cellGroupFragment3, R.id.cellGroupFragment4,
                 R.id.cellGroupFragment5, R.id.cellGroupFragment6, R.id.cellGroupFragment7, R.id.cellGroupFragment8, R.id.cellGroupFragment9};
