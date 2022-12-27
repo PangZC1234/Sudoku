@@ -112,7 +112,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                     } else if (i == 10) {
                         selectedCell.setText("");
                     } else {
-                        if (checkAllGroups() && this.isBoardCorrect()) {
+                        if (checkAllGroups()) {
                             Toast.makeText(this, "成功", Toast.LENGTH_SHORT).show();
                         } else {
                             Toast.makeText(this, "有錯誤！", Toast.LENGTH_SHORT).show();
@@ -123,39 +123,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
     }
-
-    public boolean isBoardCorrect() {
-        // Check horizontal
-        for (int i = 0; i < mat.length; i++) {
-            ArrayList<Integer> numbers = new ArrayList<>();
-            for (int j = 0; j < mat[i].length; j++) {
-                int number = mat[i][j];
-                if (numbers.contains(number)) {
-                    return false;
-                } else {
-                    numbers.add(number);
-                }
-            }
-        }
-
-        // Check vertical
-        for (int i = 0; i < mat.length; i++) {
-            ArrayList<Integer> numbers = new ArrayList<>();
-            for (int j = 0; j < mat[i].length; j++) {
-                int number = mat[j][i];
-                if (numbers.contains(number)) {
-                    return false;
-                } else {
-                    numbers.add(number);
-                }
-            }
-        }
-
-        // Check each group is in CellGroupFragment class for easier code
-        // returns true if horizontal and vertical lines are correct
-        return true;
-    }
-
+    
     private boolean checkAllGroups() {
         int cellGroupFragments[] = new int[]{R.id.cellGroupFragment, R.id.cellGroupFragment2, R.id.cellGroupFragment3, R.id.cellGroupFragment4,
                 R.id.cellGroupFragment5, R.id.cellGroupFragment6, R.id.cellGroupFragment7, R.id.cellGroupFragment8, R.id.cellGroupFragment9};
