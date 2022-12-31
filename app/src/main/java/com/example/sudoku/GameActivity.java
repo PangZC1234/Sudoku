@@ -2,23 +2,33 @@ package com.example.sudoku;
 
 //reference: https://github.com/knutkirkhorn/Android-Sudoku
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import java.io.InvalidObjectException;
 import java.util.ArrayList;
 import java.util.prefs.InvalidPreferencesFormatException;
 
 public class GameActivity extends AppCompatActivity implements View.OnClickListener, CellGroupFragment.OnFragmentInteractionListener {
+
+
     private View clickedCell;
     private View lastClickedCell;
     private int numberPadID[] = new int[]{R.id.btn1, R.id.btn2, R.id.btn3, R.id.btn4, R.id.btn5, R.id.btn6, R.id.btn7,
@@ -30,6 +40,41 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private int[][] mat;
 
     private TextView selectedCell;
+
+    @Override
+    public boolean onKeyDown(int Keycode , KeyEvent event){
+        if(Keycode == KeyEvent.KEYCODE_BACK){
+            // 創建退出對話框
+            AlertDialog isExit = new AlertDialog.Builder(this).create();
+            // 設置對話框標題
+            isExit.setTitle("系統提示");
+            // 設置對話框消息
+            isExit.setMessage("確定要退出嗎");
+            // 添加選擇按鈕並註冊監聽
+            isExit.setButton("確定", listener);
+            isExit.setButton2("取消", listener);
+            // 顯示對話框
+            isExit.show();
+        }
+        return false;
+    }
+    /**監聽對話框裏面的button點擊事件*/
+    DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener()
+    {
+        public void onClick(DialogInterface dialog, int which)
+        {
+            switch (which)
+            {
+                case AlertDialog.BUTTON_POSITIVE:// "確認"按鈕退出程序
+                    finish();
+                    break;
+                case AlertDialog.BUTTON_NEGATIVE:// "取消"第二個按鈕取消對話框
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +125,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    @SuppressLint("ResourceAsColor")
     @Override
     public void onFragmentInteraction(int groupId, int cellId, View view) {
         clickedCell = view;
@@ -136,3 +182,4 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         return true;
     }
 }
+
