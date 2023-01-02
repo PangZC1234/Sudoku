@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -24,6 +25,7 @@ import androidx.fragment.app.Fragment;
 
 import java.io.InvalidObjectException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.prefs.InvalidPreferencesFormatException;
 
 public class GameActivity extends AppCompatActivity implements View.OnClickListener, CellGroupFragment.OnFragmentInteractionListener {
@@ -38,6 +40,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     private int numOfBlanks;
     private int[][] mat;
+    private int[][] current_mat;
 
     private TextView selectedCell;
 
@@ -87,6 +90,9 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         Sudoku_generator sudoku = new Sudoku_generator(numOfBlanks);
         sudoku.fillValues();
         mat = sudoku.getSudoku();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            current_mat = Arrays.stream(mat).map(int[]::clone).toArray(int[][]::new);
+        }
 
         //links fragments id
         int cellGroupFragments[] = new int[]{R.id.cellGroupFragment, R.id.cellGroupFragment2, R.id.cellGroupFragment3, R.id.cellGroupFragment4,
@@ -148,26 +154,63 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
+        int row = ((clickedGroup - 1) / 3) * 3 + (clickedCellId / 3);
+        int column = ((clickedGroup - 1) % 3) * 3 + ((clickedCellId) % 3);
         for (int i = 1; i < 12; i++) {
             if (view.getId() == numberPadID[i - 1]) {
                 try {
                     if (i < 10) {
+                        current_mat[row][column] = i;
                         selectedCell.setText(String.valueOf(i));
                         selectedCell.setTextColor(Color.BLACK);
                         selectedCell.setTypeface(null, Typeface.BOLD);
                     } else if (i == 10) {
                         selectedCell.setText("");
                     } else {
-                        if (checkAllGroups()) {
-                            Toast.makeText(this, "成功", Toast.LENGTH_SHORT).show();
+                        if (checkAllGroups() && this.isBoardCorrect()) {
+                            Toast.makeText(this, "成功",
+                                    Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(this, "有錯誤！", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, "有錯誤！",
+                                    Toast.LENGTH_SHORT).show();
                         }
                     }
                 } catch (NullPointerException e) {
                 }
             }
         }
+    }
+
+    public boolean isBoardCorrect() {
+        // Check horizontal
+        for (int i = 0; i < current_mat.length; i++) {
+            ArrayList<Integer> numbers = new ArrayList<>();
+            for (int j = 0; j < current_mat[i].length; j++) {
+                int number = current_mat[i][j];
+                if (numbers.contains(number)) {
+                    return false;
+                } else {
+                    numbers.add(number);
+                }
+            }
+        }
+
+        // Check vertical
+        for (int i = 0; i < current_mat.length; i++) {
+            ArrayList<Integer> numbers = new ArrayList<>();
+            for (int j = 0; j < current_mat[i].length; j++) {
+                int number = current_mat[j][i];
+                if (numbers.contains(number)) {
+                    return false;
+                } else {
+                    numbers.add(number);
+                }
+            }
+        }
+
+        // Check each group is in CellGroupFragment class for easier code
+        // returns true if horizontal and vertical lines are correct
+        return true;
     }
 
     private boolean checkAllGroups() {
